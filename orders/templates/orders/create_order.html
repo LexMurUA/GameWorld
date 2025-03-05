@@ -1,0 +1,51 @@
+{% extends "main/base.html" %}
+
+{% block title %}Оформлення замовлення{% endblock %}
+
+{% block content %}
+    <h2>📋 Оформлення замовлення</h2>
+
+    <h3>🛒 Ваш кошик:</h3>
+    <ul>
+        {% for item in cart.items.all %}
+            <li>{{ item.product.name }} — {{ item.quantity }} шт. — {{ item.get_total_price }} грн</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Сума товарів:</strong> {{ cart.get_total_price }} грн</p>
+
+    <h3>🚚 Введіть ваші дані:</h3>
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="id_first_name">Ім'я:</label>
+        {{ form.first_name }}
+
+        <label for="id_last_name">Прізвище:</label>
+        {{ form.last_name }}
+
+        <label for="id_phone_number">Телефон:</label>
+        {{ form.phone_number }}
+
+        <label for="id_email">Email:</label>
+        {{ form.email }}
+
+        <h3>🚚 Введіть дані доставки:</h3>
+        <label for="id_delivery_method">Спосіб доставки:</label>
+        {{ form.delivery_method }}
+
+        <label for="id_city_address">Місто/Село:</label>
+        {{ form.city_address }}
+
+        <label for="id_delivery_address">Адреса доставки:</label>
+        {{ form.delivery_address }}
+
+        <h3>💳 Виберіть спосіб оплати:</h3>
+        <label for="id_payment_method">Спосіб оплати:</label>
+        {{ form.payment_method }}
+
+        <br><br>
+        <button type="submit">✅ Оформити замовлення</button>
+    </form>
+
+    <a href="{% url 'cart_detail' %}">⬅ Повернутись до кошика</a>
+{% endblock %}

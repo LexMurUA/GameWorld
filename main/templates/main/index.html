@@ -1,0 +1,53 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    
+    <h1>Оберіть розділ</h1>
+    <h2> 
+        <div class="chapters">
+        <li><a  href="{% url 'product_menu_page' product_menu='vendors' %}">Бренди</a></li>
+        <li><a  href="{% url 'product_menu_page' product_menu='categories' %}">Категорії</a></li>
+        <li><a  href="{% url 'product_menu_page' product_menu='products' %}">Усі товари</a></li>
+        </div>
+    </h2>
+    <div class="advertising-banner">
+        {% for banner in banners %}
+            {% if banner.adv_image %}
+                {% if banner.link %}
+                    <a href="{{ banner.link }}" target="_blank">
+                        <div class="banner">
+                            <img src="{{ banner.adv_image.image.url }}" alt="{{ banner.name }}">
+                            <h2>Клікай😀</h2>
+                        </div>
+                    </a>
+                {% else %}
+                    <div class="banner">
+                        <img src="{{ banner.adv_image.image.url }}" alt="{{ banner.name }}">
+                        <h2>{{ banner.name }}</h2>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+    <h2>ТОП ТОВАРИ</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for picture in images %}
+                <div class="swiper-slide">
+                    <a href="{% url 'product_detail' picture.product.id %}">
+                        <img src="{{ picture.image.url }}" alt="{{ picture.product.name }}">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    
+
+{% endblock %}

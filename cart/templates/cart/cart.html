@@ -1,0 +1,101 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+    <h2>🛒 Корзина</h2>
+
+    {% if cart.items.all %}
+        <div class="cart-items">
+            {% for item in cart.items.all %}
+                <div class="cart-item">
+                    {% if item.product.images.all %}
+                        <img src="{{ item.product.images.first.image.url }}" class="cart-item-image" alt="{{ item.product.name }}">
+                    {% else %}
+                        <img src="{% static 'images/no-image.png' %}" class="cart-item-image" alt="Зображення відсутнє">
+                    {% endif %}
+                    <div class="cart-item-details">
+                        <h4>{{ item.product.name }}</h4>
+                        <p>{{ item.quantity }} шт. — {{ item.get_total_price }} грн</p>
+                        <div class="cart-actions">
+                            <a href="{% url 'action_cart' 'remove' item.product.id %}" class="remove-btn">❌ Видалити</a>
+                            <a href="{% url 'action_cart' 'decrease' item.product.id %}" class="decrease-btn">➖</a>
+                            <a href="{% url 'action_cart' 'increase' item.product.id %}" class="increase-btn">➕</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <p><strong>Сума:</strong> {{ cart.get_total_price }} грн</p>
+
+        <a href="{% url 'create_order' %}" class="order-btn">✅ Оформити замовлення</a>
+
+    {% else %}
+        <p>Корзина порожня</p>
+    {% endif %}
+<style>
+    .cart-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    background: #f3b808;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+.cart-item-image {
+    width: 100px;
+    height: auto;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.remove-btn, .decrease-btn, .increase-btn {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.remove-btn {
+    background: red;
+}
+
+.decrease-btn {
+    background: rgb(241, 11, 191);
+}
+
+.increase-btn {
+    background: green;
+}
+
+.order-btn {
+    display: inline-block;
+    background: rgb(45, 200, 200);
+    color: rgb(228, 0, 0);
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+</style>
+    {% endblock %}

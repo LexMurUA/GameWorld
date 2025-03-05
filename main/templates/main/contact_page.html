@@ -1,0 +1,30 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}Контакти{% endblock %}
+
+{% block content %}
+<h1>Наше місцезнаходження</h1>
+{% if adress %}
+    <h2>Адреса магазину: {{ adress.adress_text }}</h2>
+{% else %}
+    <h2>Адреса магазину: не вказана</h2>
+{% endif %}
+
+<div class="map-container">
+    {% if adress and adress.link %}
+        <iframe 
+            src="{{ adress.link }}"
+            width="600" 
+            height="450" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+        </iframe>
+    {% else %}
+        <p>Карта недоступна</p>
+    {% endif %}
+</div>
+<a href="{% url 'main_page' %}" class="btn btn-secondary">⬅ Назад</a>
+{% endblock %}
+
+

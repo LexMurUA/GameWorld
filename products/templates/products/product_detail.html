@@ -1,0 +1,72 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<div class="product_map">
+    <h1>{{ product.name }}</h1>
+
+    {% if product.images.all %}
+        <div class="image-gallery">
+            {% for image in product.images.all %}
+                <img src="{{ image.image.url }}" alt="{{ product.name }}" width="300">
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Зображення відсутні.</p>
+    {% endif %}
+
+    <p><strong>Артикул:</strong> {{ product.code }}</p>
+    <p><strong>Опис:</strong> {{ product.description }}</p>
+    
+    {% if product.sale_price %}
+        <p><strong>Ціна:</strong> <del>{{ product.price }}</del> <span style="color: red;">{{ product.sale_price }}</span></p>
+    {% else %}
+        <p><strong>Ціна:</strong> {{ product.price }}</p>
+    {% endif %}
+    {% if product.availability == availability_choices.IN_AVAILABILITY %}
+        <button class="btn btn-sm btn-primary add-to-cart" data-product-id="{{ product.id }}">🛒 Додати</button>
+    {% else %}
+        <p style="color: red; font-weight: bold;">Немає в наявності</p>
+    {% endif %}
+
+    <p><strong>Категорія:</strong> 
+        <a href="{% url 'category_detail' product.product_category.id %}">{{ product.product_category.name }}</a>
+    </p>
+
+    {% if product.vendor %}
+        <p><strong>Бренд:</strong> 
+            <a href="{% url 'vendor_detail' product.vendor.id %}">{{ product.vendor.name }}</a>
+        </p>
+    {% endif %}
+
+    {% if product.tags.all %}
+        <p><strong>Теги:</strong> 
+            {% for tag in product.tags.all %}
+                <span class="badge">{{ tag.name }}</span>
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    {% if product.genre.all %}
+        <p><strong>Жанри:</strong> 
+            {% for genre in product.genre.all %}
+                <span class="badge">{{ genre.name }}</span>
+            {% endfor %}
+        </p>
+    {% endif %}
+    <h3>Відгуки</h3>
+    {% for review in product.reviews.all %}
+        <p><strong>{{ review.user.first_name }}</strong> ({{ review.get_mark_display }})</p>
+        <p>{{ review.text }}</p>
+        <hr>
+    {% empty %}
+        <p>Поки що немає відгуків.</p>
+    {% endfor %}
+    
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_review' product.id %}">➕ Додати відгук</a>
+    {% else %}
+        <p>Щоб залишити відгук, <a href="{% url 'login' %}">увійдіть</a>.</p>
+    {% endif %}
+    <a href="{% url 'product_menu_page' 'products' %}" class="btn btn-primary">Назад до списку товарів</a>
+</div>
+{% endblock %}

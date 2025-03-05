@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+
+{% block title %}Профіль користувача{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>👤 Профіль користувача</h1>
+
+    <p><strong>Ім'я:</strong> {{ user_detail.first_name }}</p>
+    <p><strong>Прізвище:</strong> {{ user_detail.last_name }}</p>
+    <p><strong>Номер телефону:</strong> {{ user_detail.phone_number|default:"Немає номера" }}</p>
+    <p><strong>Email:</strong> {{ user_detail.email }}</p>
+
+    <h2>📦 Замовлення</h2>
+
+    <a href="{% url 'order_list' %}" class="btn btn-primary">➡ Переглянути всі замовлення</a>
+
+    {% if request.user == user_detail %}
+        <br><br>
+        <a href="{% url 'logout' %}" class="btn btn-danger">🚪 Вийти</a>
+    {% endif %}
+</div>
+{% endblock %}

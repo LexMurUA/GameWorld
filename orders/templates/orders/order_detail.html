@@ -1,0 +1,61 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>📦 Замовлення №{{ order.order_number }}</h2>
+
+<p><strong>📌 Статус:</strong> {{ order.get_status_display }}</p>
+<p><strong>💰 Загальна сума:</strong> {{ order.total_price }} грн</p>
+<p><strong>🕒 Дата створення:</strong> {{ order.created_at }}</p>
+
+<h3>👤 Інформація про клієнта:</h3>
+<p><strong>👤 Ім'я:</strong> {{ order.first_name }}</p>
+<p><strong>🧑‍💼 Прізвище:</strong> {{ order.last_name }}</p>
+<p><strong>📞 Телефон:</strong> {{ order.phone_number }}</p>
+<p><strong>📧 Email:</strong> {{ order.email }}</p>
+
+<h3>🛍️ Товари у замовленні:</h3>
+<div class="cart-items">
+    {% for item in order.cart.items.all %}
+        <div class="cart-item">
+            {% if item.product.images.all %}
+                <img src="{{ item.product.images.first.image.url }}" class="cart-item-image" alt="{{ item.product.name }}">
+            {% else %}
+                <img src="{% static 'images/no-image.png' %}" class="cart-item-image" alt="Зображення відсутнє">
+            {% endif %}
+            <p>{{ item.product.name }} — {{ item.quantity }} шт. × {{ item.product.get_final_price }} грн = {{ item.get_total_price }} грн</p>
+        </div>
+    {% endfor %}
+</div>
+
+<h3>🚚 Інформація про доставку:</h3>
+<p><strong>📍 Спосіб доставки:</strong> {{ order.delivery_method }}</p>
+<p><strong>🏙️ Місто:</strong> {{ order.city_address }}</p>
+<p><strong>📦 Адреса доставки:</strong> {{ order.delivery_address }}</p>
+
+<h3>💳 Оплата:</h3>
+<p><strong>💵 Спосіб оплати:</strong> {{ order.payment_method }}</p>
+
+<a href="{% url 'main_page' %}">⬅ Повернутись на головну</a>
+
+<style>
+    .cart-items {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .cart-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .cart-item-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+
+    }
+</style>
+{% endblock %}

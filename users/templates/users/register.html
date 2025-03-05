@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block content %}
+    <h2>Реєстрація</h2>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <input type="email" name="email" placeholder="Пошта (Email)" required>
+        <input type="tel" name="phone_number" placeholder="Номер телефону" required 
+               pattern="^\+?[0-9\s\-\(\)]{7,15}$" maxlength="15"
+               title="Введіть коректний номер телефону">
+        <input type="text" name="first_name" placeholder="Ім'я" required>
+        <input type="text" name="last_name" placeholder="Прізвище" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        <input type="password" name="password_confirm" placeholder="Повторіть пароль" required>
+        
+        <button type="submit">Зареєструватися</button>
+    </form>
+{% endblock %}

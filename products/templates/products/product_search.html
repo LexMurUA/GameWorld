@@ -1,0 +1,51 @@
+{% extends "main/base.html" %}
+{% load static %} 
+{% block title %}Результати пошуку{% endblock %}
+
+{% block content %}
+    <h2>🔍 Результати пошуку</h2>
+
+    <form method="GET" action="{% url 'product_search' %}">
+        <input type="text" name="q" value="{{ query }}" placeholder="Пошук товарів..." required>
+        <button type="submit">🔎 Пошук</button>
+    </form>
+
+    {% if results %}
+        <div class="row">
+            {% for product in results %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card mb-3 shadow-sm">
+                        {% if product.images.all %}
+                            <img src="{{ product.images.first.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="{% static 'images/no-image.png' %}" class="card-img-top product-image" alt="Зображення відсутнє">
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h6 class="card-title">
+                                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                            </h6>
+                            <p class="card-text">
+                                {% if product.sale_price %}
+                                    <del>{{ product.price }} грн</del> 
+                                    <span style="color: red; font-weight: bold;">{{ product.sale_price }} грн</span>
+                                {% else %}
+                                    {{ product.price }} грн
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>😞 Нічого не знайдено за запитом "{{ query }}"</p>
+    {% endif %}
+    <style>
+        .product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+    {% load static %}
+<!-- Swiper.js CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<head>
+    <link rel="icon" type="image/x-icon" href="{% static 'main/favicon.ico' %}">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My choice{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
+    {% block extra-css %}  
+    {% endblock %}
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var swiper = new Swiper(".mySwiper", {
+            loop: true,  
+            slidesPerView: 3,  
+            spaceBetween: 20,  
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            autoplay: {
+                delay: 3000,  
+                disableOnInteraction: false,  
+            },
+        });
+    });
+    </script>
+    
+<body>
+    <header>
+        <a href="{% url 'main_page' %}">
+            <img src="{% static 'main/css/images/logo.jpg' %}" class="logo" alt="GameWorld Logo">
+        </a>
+            <a href="{% url 'main_page' %}">Головна</a>
+            <a href="{% url 'about_page' %}">Про нас</a>
+            <a href="{% url 'contact_page' %}">Контакти</a>   
+          <!-- 🔍 Форма пошуку -->
+          <form method="GET" action="{% url 'product_search' %}">
+            <input type="text" name="q" placeholder="🔎 Пошук товарів..." required>
+            <button type="submit">🔍</button>
+        </form>
+        
+        <div class="auth-menu">
+            {% if user.is_authenticated %}
+                <p>Привіт, {{ user.first_name }}! <a href="{% url 'logout' %}">Вийти</a></p>
+            {% else %}
+                <a href="{% url 'login' %}">Увійти</a><a href="{% url 'register' %}">Реєстрація</a>  
+            {% endif %}
+            {% if user.is_authenticated %}
+            <div class="user_enter">
+                <a href="{% url 'user_detail_page' user.id  %}">
+                    <button>💼 Кабінет користувача</button>
+                </a>
+            </div> 
+            {% endif %}
+            <div class="cart">
+                <a href="{% url 'cart_detail' %}">
+                    <button>🛒 Кошик (<span id="cart-counter">{{ cart_items_count }}</span>)</button>
+                </a>
+            </div>
+            
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>  
+        <p>&copy; 2025 GameWorld. Всі права захищені.</p>
+    </footer>
+    <script src="{% static 'cart/css/js/cart.js' %}"></script>
+</body>
+</html>
+
+
+

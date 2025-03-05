@@ -1,0 +1,106 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+    {% if product_menu == "categories" %}
+        Категорії
+    {% elif product_menu == "vendors" %}
+        Бренди
+    {% elif product_menu == "products" %}
+        Товари
+    {% else %}
+        {{ product_menu|title }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {% if product_menu == "categories" %}
+            Категорії
+        {% elif product_menu == "vendors" %}
+            Бренди
+        {% elif product_menu == "products" %}
+            Товари
+        {% else %}
+            {{ product_menu|title }}
+        {% endif %}
+    </h1>
+
+    {% if product_menu == "products" %}
+        <div style="margin-bottom: 20px;">
+            <form method="GET">
+                <label for="category">Категорія:</label>
+                <select name="category" id="category" onchange="this.form.submit()">
+                    <option value="">Всі категорії</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="vendor">Бренд:</label>
+                <select name="vendor" id="vendor" onchange="this.form.submit()">
+                    <option value="">Всі бренди</option>
+                    {% for vendor in vendors %}
+                        <option value="{{ vendor.id }}" {% if vendor.id|stringformat:"s" == selected_vendor %}selected{% endif %}>
+                            {{ vendor.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if items %}
+        <ul>
+            {% for item in items %}
+                {% if product_menu == "categories" %}
+                    <a class="category_detail" href="{% url 'category_detail' item.id %}">
+                        <span>{{ item.name }}</span>
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        {% else %}
+                            <img src="/static/default-image.jpg" alt="Немає зображення">
+                        {% endif %}
+                    </a>
+                
+
+                {% elif product_menu == "vendors" %}
+                    <a class="vendor_detail" href="{% url 'vendor_detail' item.id %}">
+                        <span>{{ item.name }}</span>
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        {% else %}
+                            <img src="/static/default-image.jpg" alt="Немає зображення">
+                        {% endif %}
+                    </a>
+            
+                    {% elif product_menu == "products" %}
+                    <a class="product_detail" href="{% url 'product_detail' item.id %}">
+                        <div class="product-card">
+                            <span>{{ item.name }}</span>
+                            {% if item.images.all %}
+                                <img src="{{ item.images.first.image.url }}" alt="{{ item.name }}">
+                            {% else %}
+                                <img src="/static/default-image.jpg" alt="Немає зображення">
+                            {% endif %}
+                            <p class="card-text">
+                                {% if item.sale_price %}
+                                    <del>{{ item.price }} грн</del> 
+                                    <span class="text-danger fw-bold">{{ item.sale_price }} грн</span>
+                                {% else %}
+                                    {{ item.price }} грн
+                                {% endif %}
+                            </p> 
+                        </div>
+                    </a>
+                {% endif %}
+                
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>🔍 Нічого не знайдено.</p>
+     <a href="{% url 'main_page'  %}" class="btn btn-secondary">⬅ Назад </a>     
+    {% endif %}
+    <a href="{% url 'main_page'  %}" class="btn btn-secondary">⬅ Назад </a>    
+{% endblock %}

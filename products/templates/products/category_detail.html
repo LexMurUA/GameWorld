@@ -1,0 +1,72 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Категорія: {{ category.name }}</h1>
+
+    {% if products %}
+        <h3>Товари у цій категорії:</h3>
+        <div class="row">
+            {% for product in products %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card mb-3 shadow-sm">
+                        <a href="{% url 'product_detail' product.id %}">
+                            <img src="{{ product.images.first.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        </a>
+
+                        <div class="card-body text-center">
+                            <h6 class="card-title">
+                                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                            </h6>
+                            <p class="card-text">
+                                {% if product.sale_price %}
+                                    <del>{{ product.price }} грн</del> 
+                                    <span class="text-danger fw-bold">{{ product.sale_price }} грн</span>
+                                {% else %}
+                                    {{ product.price }} грн
+                                {% endif %}
+                            </p>
+                            {% if product.availability == availability_choices.IN_AVAILABILITY %}
+                                <button class="btn btn-sm btn-primary add-to-cart" data-product-id="{{ product.id }}">🛒 Додати</button>
+                            {% else %}
+                                <p class="text-danger fw-bold">Немає в наявності</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>У цій категорії поки що немає товарів.</p>
+    {% endif %}
+
+    <a href="{% url 'product_menu_page' 'categories' %}" class="btn btn-secondary mt-3">⬅ Назад до списку категорій</a>
+</div>
+
+<style>
+    .product-image {
+        width: 150px; 
+        height: 150px; 
+        object-fit: cover;  
+        border-radius: 10px;
+        margin-top: 5px; 
+    }
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .card-title {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .btn-sm {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+</style>
+{% endblock %}

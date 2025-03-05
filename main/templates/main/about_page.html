@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}Про нас{% endblock %}
+
+{% block content %}
+<div class="about_us">
+    {% if about_us %}
+    <div class="store-info">
+        <h3>Інформація про магазин</h3>
+        <p>{{ about_us.text_about }}</p>
+    </div>
+{% endif %}
+
+</div>
+<a href="{% url 'main_page' %}" class="btn btn-secondary">⬅ Назад</a>
+{% endblock %}
