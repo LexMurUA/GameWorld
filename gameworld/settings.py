@@ -144,3 +144,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# import os
+# import sys
+
+# # Указываем путь к проекту
+# project_home = '/home/LexUA/GameWorld'
+# if project_home not in sys.path:
+#     sys.path.append(project_home)
+
+# # Активируем виртуальное окружение
+# venv_path = '/home/LexUA/GameWorld/.venv/bin/activate_this.py'
+# if os.path.exists(venv_path):
+#     exec(open(venv_path).read(), dict(__file__=venv_path))
+
+# # Устанавливаем настройки Django
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gameworld.settings')
+
+# # Загружаем Django-приложение
+# from django.core.wsgi import get_wsgi_application
+# application = get_wsgi_application()
+
